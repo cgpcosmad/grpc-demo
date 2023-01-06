@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+
+package es.carlosgarcia;
+
+option java_multiple_files = true;
+option java_package = "es.carlosgarcia";
+option java_outer_classname = "CalculatorProto";
+
+
+
+message CalcRequest {
+  enum Operation {
+    SUM = 0;
+    SUSTRACT = 1;
+  }
+
+  Operation operation = 1;
+  int64 n1 = 2;
+  int64 n2 = 3;
+}
+
+message CalcResponse {
+  int64 value = 1;
+}
+
+
+message PingRequest {
+  string message = 1;
+  int32  count = 2;
+}
+
+message PingResponse {
+  string message = 1;
+}
+
+
+message AggregationRequest {
+  string message = 1;
+
+}
+
+message AggregationResponse {
+  string message = 1;
+}
+
+
+message ChatRequest {
+  int64 timestamp = 1;
+  string message = 2;
+}
+
+message ChatResponse {
+  int64 timestamp = 1;
+  string message = 2;
+}
+
+
+
+service CalcService {
+
+  // UNARY
+  rpc calculate(CalcRequest) returns (CalcResponse);
+
+  // SERVER-SIDE streaming
+  rpc ping(PingRequest) returns (stream PingResponse);
+
+  // CLIENT-SIDE streaming  (Only
+  //    HOLA    -> void
+  //    ADIOS   -> void
+  //    HELLO   -> void
+  // << onComplete for client side>>
+  //    THANKS  -> HOLA ADIOS HELLO THANKS
+  rpc aggregate(stream AggregationRequest) returns (AggregationResponse);
+
+  // BIDI streaming
+  // Rules:
+  // a) The server will only respond with the "Yes" word when it receive a question
+  //    (anything phrase containing a ? char)
+  // b) The communication will end when the "bye" word is received
+  rpc chat(stream ChatRequest) returns (stream ChatResponse);
+}

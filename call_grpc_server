@@ -1,0 +1,9 @@
+# brew install grpcurl
+
+grpcurl -plaintext grpc://localhost:8080 list
+
+
+
+# Download image
+docker pull fullstorydev/grpcurl:latest
+docker run fullstorydev/grpcurl localhost:443 list
